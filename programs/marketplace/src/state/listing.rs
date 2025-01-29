@@ -4,7 +4,7 @@ use anchor_lang::prelude::*;
 pub struct Listing {
     pub maker: Pubkey,
     pub mint: Pubkey,
-    pub price: u64,
+    pub price: u64, // price in sol
     pub bump: u8,
 }
 

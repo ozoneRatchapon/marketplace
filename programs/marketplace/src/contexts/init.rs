@@ -34,7 +34,16 @@ pub struct Initialize<'info> {
 
 impl<'info> Initialize<'info> {
     pub fn init(&mut self, name: String, fee: u16, bumps: InitializeBumps) -> Result<()> {
-        require!(name.len() > 0, "Name must not be empty");
+        require!(
+            name.len() > 0 && name.len() <= 32,
+            "Name too long",
+            MarketplaceError::NameTooLong
+        );
+        require!(
+            fee > 0 && fee < 1000,
+            "Fee too high",
+            MarketplaceError::InvalidFee
+        );
         self.marketplace.set_inner(Marketplace {
             admin: self.admin.key(),
             fee,
