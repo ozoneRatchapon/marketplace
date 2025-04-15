@@ -1,4 +1,12 @@
+#![allow(unexpected_cfgs)]
 use anchor_lang::prelude::*;
+
+pub mod contexts;
+pub mod state;
+pub mod errors;
+
+pub use contexts::*;
+pub use state::*;
 
 declare_id!("HKA9qcoQnB2DyV5N1xpBujcVcqTzDvMhakMmVg96Sry9");
 
@@ -6,12 +14,23 @@ declare_id!("HKA9qcoQnB2DyV5N1xpBujcVcqTzDvMhakMmVg96Sry9");
 pub mod marketplace {
     use super::*;
 
-    pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        msg!("Greetings from: {:?}", ctx.program_id);
-        Ok(())
+    pub fn initialize(ctx: Context<Initialize>, name: String, fee: u16) -> Result<()> {
+        ctx.accounts.init(name, fee, &ctx.bumps)
     }
-}
 
-#[derive(Accounts)]
-pub struct Initialize {
+    // pub fn list(ctx: Context<List>, price: u64) -> Result<()> {
+    //     ctx.accounts.create_listing(price, &ctx.bumps)?;
+    //     ctx.accounts.deposit_nft()
+    // }
+
+    // pub fn purchase(ctx: Context<Purchase>) -> Result<()> {
+    //     ctx.accounts.pay()?;
+    //     ctx.accounts.send_nft()?;
+    //     ctx.accounts.close_mint_vault()
+    // }
+
+    // pub fn delist(ctx: Context<Delist>) -> Result<()> {
+    //     ctx.accounts.withdraw_nft()?;
+    //     ctx.accounts.close_mint_vault()
+    // }
 }
