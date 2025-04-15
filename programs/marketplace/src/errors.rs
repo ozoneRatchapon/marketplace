@@ -8,4 +8,8 @@ pub enum MarketplaceError {
     ArithmeticOverflow,
     #[msg("Fee% 0 to 1000 (0-100%)")]
     InvalidFee,
+    #[msg("Invalid collection")]
+    InvalidCollection,
+    #[msg("Invalid metadata")]
+    InvalidMetadata,
 }
