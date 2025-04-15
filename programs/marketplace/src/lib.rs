@@ -18,19 +18,18 @@ pub mod marketplace {
         ctx.accounts.init(name, fee, &ctx.bumps)
     }
 
-    // pub fn list(ctx: Context<List>, price: u64) -> Result<()> {
-    //     ctx.accounts.create_listing(price, &ctx.bumps)?;
-    //     ctx.accounts.deposit_nft()
-    // }
+    pub fn list(ctx: Context<List>, price: u64) -> Result<()> {
+        ctx.accounts.create_listing(price, &ctx.bumps)?;
+        ctx.accounts.deposit_nft()
+    }
 
-    // pub fn purchase(ctx: Context<Purchase>) -> Result<()> {
-    //     ctx.accounts.pay()?;
-    //     ctx.accounts.send_nft()?;
-    //     ctx.accounts.close_mint_vault()
-    // }
+    pub fn purchase(ctx: Context<Purchase>) -> Result<()> {
+        ctx.accounts.pay()?;
+        ctx.accounts.transfer_nft()?;
+        ctx.accounts.close_vault_account()
+    }
 
-    // pub fn delist(ctx: Context<Delist>) -> Result<()> {
-    //     ctx.accounts.withdraw_nft()?;
-    //     ctx.accounts.close_mint_vault()
-    // }
+    pub fn delist(ctx: Context<Delist>) -> Result<()> {
+        ctx.accounts.withdraw_nft()
+    }
 }

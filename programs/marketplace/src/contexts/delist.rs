@@ -1,4 +1,8 @@
 use anchor_lang::prelude::*;
+use anchor_spl::{
+    token::{close_account, transfer_checked, CloseAccount, TransferChecked},
+    token_interface::{Mint, TokenAccount, TokenInterface},
+};
 
 use crate::state::{Listing, Marketplace};
 
@@ -7,7 +11,7 @@ pub struct Delist<'info> {
     #[account(mut)]
     pub maker: Signer<'info>,
     #[account(
-        seeds = [b"marketplace",marketplace.name..as_str().as_bytes()],
+        seeds = [b"marketplace",marketplace.name.as_bytes()],
         bump = marketplace.bump,
     )]
     pub marketplace: Account<'info, Marketplace>,
@@ -23,7 +27,7 @@ pub struct Delist<'info> {
 
     #[account(
         mut,
-        seeds = [b"lising",marketplace.key().as_ref(),maker_mint.key().as_ref()],
+        seeds = [marketplace.key().as_ref(),maker_mint.key().as_ref()],
         bump,
         close = maker,
     )]
@@ -37,15 +41,14 @@ pub struct Delist<'info> {
     pub vault: InterfaceAccount<'info, TokenAccount>,
 
     pub system_program: Program<'info, System>,
-    pub token_program: Program<'info, Token>,
+    pub token_program: Interface<'info, TokenInterface>,
 }
 
 impl<'info> Delist<'info> {
     pub fn withdraw_nft(&mut self) -> Result<()> {
         let seeds = &[
-            b"listing",
-            &self.marketplace.key().as_byte()[..],
-            &self.maker_mint.key().as_ref()[..],
+            &self.marketplace.key().to_bytes()[..],
+            &self.maker_mint.key().to_bytes()[..],
             &[self.listing.bump],
         ];
         let signer_seeds = &[&seeds[..]];
@@ -67,14 +70,12 @@ impl<'info> Delist<'info> {
 
         let cpi_accounts = CloseAccount {
             account: self.vault.to_account_info(),
-            destination: self.lising.to_account_info(),
+            destination: self.listing.to_account_info(),
             authority: self.maker.to_account_info(),
         };
 
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
 
-        close_account(cpi_ctx)?;
-
-        Ok(())
+        close_account(cpi_ctx)
     }
 }
