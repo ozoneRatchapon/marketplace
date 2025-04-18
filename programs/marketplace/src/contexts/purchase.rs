@@ -24,7 +24,7 @@ pub struct Purchase<'info> {
     pub maker: SystemAccount<'info>,
     pub maker_mint: InterfaceAccount<'info, Mint>,
     #[account(
-        seeds = [b"marketplace",marketplace.name.as_str().as_bytes()],
+        seeds = [b"marketplace",marketplace.name.as_bytes()],
         bump = marketplace.bump,
     )]
     pub marketplace: Account<'info, Marketplace>,
@@ -77,7 +77,7 @@ pub struct Purchase<'info> {
     pub token_program: Interface<'info, TokenInterface>,
 }
 
-impl<'info> Purchase<'info> {
+impl Purchase<'_> {
     // send sol
     pub fn pay(&mut self) -> Result<()> {
         let cpi_program = self.system_program.to_account_info();

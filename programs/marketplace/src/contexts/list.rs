@@ -53,7 +53,7 @@ pub struct List<'info> {
         seeds::program = metadata_program.key(),
         bump,
         constraint = metadata.collection.as_ref().unwrap().key.as_ref() == collection_mint.key().as_ref() @MarketplaceError::InvalidCollection,
-        constraint = metadata.collection.as_ref().unwrap().verified == true @MarketplaceError::InvalidMetadata,
+        constraint = metadata.collection.as_ref().unwrap().verified @MarketplaceError::InvalidMetadata,
     )]
     pub metadata: Account<'info, MetadataAccount>,
 
@@ -75,7 +75,7 @@ pub struct List<'info> {
     pub token_program: Interface<'info, TokenInterface>,
 }
 
-impl<'info> List<'info> {
+impl List<'_> {
     pub fn create_listing(&mut self, price: u64, bumps: &ListBumps) -> Result<()> {
         self.listing.set_inner(Listing {
             maker: self.maker.key(),

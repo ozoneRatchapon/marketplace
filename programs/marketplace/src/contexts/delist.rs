@@ -44,7 +44,7 @@ pub struct Delist<'info> {
     pub token_program: Interface<'info, TokenInterface>,
 }
 
-impl<'info> Delist<'info> {
+impl Delist<'_> {
     pub fn withdraw_nft(&mut self) -> Result<()> {
         let seeds = &[
             &self.marketplace.key().to_bytes()[..],
